@@ -2,13 +2,13 @@
 
 Este repositório contém o passo a passo para o ciclo completo de versionamento inicial utilizando Git e GitHub. 
 
-## 📋 Pré-requisitos
+## 📋 Pré-requisitos:
 - Git instalado na máquina (verifique com `git --version`).
 - Conta no GitHub criada e autenticada.
 
 ---
 
-## 🚀 Passo a Passo
+## 🚀 Passo a Passo:
 
 ### 1. Criar o repositório no GitHub
 Crie um repositório público vazio no GitHub, que será o ponto de partida do projeto.
@@ -83,7 +83,7 @@ git push -u origin feature/adiciona-gitignore
 
 ---
 
-## ✅ Checklist Rápido de Comandos
+## ✅ Checklist Rápido de Comandos:
 
 ```bash
 # 1. Clonar o repositório
