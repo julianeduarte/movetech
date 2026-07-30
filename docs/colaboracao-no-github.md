@@ -58,3 +58,148 @@ Atualize sua cópia local da `main`:
 ```bash
 git checkout main
 git pull
+```
+
+✅ **Resultado esperado — o `.gitignore` agora está na `main` local:**
+```text
+Updating a1b2c3d..b3c4d5e
+Fast-forward
+ .gitignore | 4 ++++
+```
+
+---
+
+## 4. Provocar e resolver um conflito de merge
+
+Conflitos acontecem quando duas pessoas alteram a mesma linha do mesmo arquivo. Vamos simular isso:
+
+Crie duas branches a partir da `main`, ambas alterando a mesma linha do `README.md`:
+```bash
+git checkout main
+git checkout -b branch-A
+```
+
+Edite a última linha do `README.md`, escreva: *"Versão A do repositório."*
+```bash
+git add README.md
+git commit -m "docs: versão A"
+```
+
+Volte para a `main` e crie a `branch-B` com uma alteração conflitante na mesma linha:
+```bash
+git checkout main
+git checkout -b branch-B
+```
+
+Edite a mesma última linha do `README.md`, escreva: *"Versão B do repositório."*
+```bash
+git add README.md
+git commit -m "docs: versão B"
+```
+
+Faça o merge da `branch-A` na `main` (vai direto, sem conflito):
+```bash
+git checkout main
+git merge branch-A
+```
+
+Agora tente fazer o merge da `branch-B` (aqui surge o conflito):
+```bash
+git merge branch-B
+```
+
+⚠️ **Resultado esperado:**
+```text
+CONFLICT (content): Merge conflict in README.md
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+Abra o `README.md` — o Git marcou o conflito:
+```text
+<<<<<<< HEAD
+Versão A do repositório.
+=======
+Versão B do repositório.
+>>>>>>> branch-B
+```
+
+**Edite o arquivo para resolver:** escolha uma versão (ou combine as duas) e remova as marcações. Por exemplo:
+*Versão final do repositório (A + B combinados).*
+
+Finalize o merge:
+```bash
+git add README.md
+git commit -m "merge: resolve conflito entre branch-A e branch-B"
+```
+
+✅ **Resultado esperado:** `[main c4d5e6f] merge: resolve conflito entre branch-A e branch-B`
+
+---
+
+## 5. Reverter uma alteração com `git revert`
+
+Se um commit com problema chegar à `main`, o `git revert` cria um novo commit que desfaz as alterações — sem reescrever o histórico.
+
+Primeiro, crie um commit para reverter. Adicione uma linha qualquer ao `README.md`:
+```bash
+echo "Linha adicionada por engano." >> README.md
+git add README.md
+git commit -m "chore: linha adicionada por engano"
+```
+
+Verifique o histórico para confirmar que o commit está no topo:
+```bash
+git log --oneline
+```
+
+✅ **Resultado esperado — o commit novo aparece em HEAD:**
+```text
+a1b2c3d (HEAD -> main) chore: linha adicionada por engano
+b3c4d5e merge: resolve conflito entre branch-A e branch-B
+...
+```
+
+Agora reverta o commit do topo do histórico:
+```bash
+git revert HEAD --no-edit
+```
+
+✅ **Resultado esperado — um novo commit de reversão é criado automaticamente:**
+```text
+[main d5e6f7g] Revert "chore: linha adicionada por engano"
+ 1 file changed, 1 deletion(-)
+```
+
+Envie a `main` atualizada para o GitHub:
+```bash
+git push
+```
+
+> 🛡️ **Ponto importante:** `git revert` não apaga o histórico — apenas adiciona um commit que desfaz as alterações. Isso é seguro para branches compartilhadas.
+>
+> 💡 **Por que `HEAD` e não o hash?** `git revert HEAD` desfaz sempre o commit mais recente. Usar o hash de um commit mais antigo pode falhar se o conteúdo do arquivo já foi modificado por commits posteriores.
+
+---
+
+## ✅ Checklist Rápido
+
+```bash
+# Após merge, atualizar a main local
+git checkout main && git pull
+
+# Simular conflito
+git checkout -b branch-A
+# edite README.md → git add . → git commit -m 'docs: versão A'
+git checkout main
+git checkout -b branch-B
+# edite a mesma linha → git add . → git commit -m 'docs: versão B'
+git checkout main && git merge branch-A
+git merge branch-B
+# edite README.md (remove marcações) → git add README.md → git commit -m 'merge: resolve conflito'
+
+# Reverter o commit mais recente
+echo "Linha adicionada por engano." >> README.md
+git add README.md && git commit -m "chore: linha adicionada por engano"
+git revert HEAD --no-edit
+git push
+```
