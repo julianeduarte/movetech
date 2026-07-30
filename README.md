@@ -107,3 +107,8 @@ git commit -m "chore: adiciona .gitignore"
 # 6. Enviar branch ao GitHub
 git push -u origin feature/adiciona-gitignore
 ```
+
+## 🚀 Próximos Passos
+
+A continuação deste projeto, detalhando o fluxo de trabalho em equipe e versionamento avançado, está disponível aqui:
+👉 [Ir para a Parte 2: Colaboração no GitHub](docs/colaboracao-no-github.md)
